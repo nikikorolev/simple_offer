@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: simple_offer_redis
+    ports:
+      - "6379:6379"
+
+  bot:
+    build: .
+    container_name: simple_offer_bot
+    depends_on:
+      - redis
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
