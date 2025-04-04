@@ -48,14 +48,20 @@ git clone https://github.com/nikikorolev/simple_offer.git
 cd simple_offer
 ```
 
-### 2️⃣ Установка зависимостей
+### 2️⃣ Создание и активация виртуального окружения
+```bash
+python3 -m venv venv
+source venv/bin/activate  # для Windows используйте `venv\Scripts\activate`
+```
+
+### 3️⃣ Установка зависимостей
 Используйте Poetry для установки всех зависимостей:
 
 ```bash
 poetry install
 ```
 
-### 3️⃣ Настройка переменных окружения
+### 4️⃣ Настройка переменных окружения
 Создайте .env файл в директории src и укажите в нём настройки:
 ```env
 TOKEN = "YOUR_BOT_TOKEN"
@@ -65,7 +71,7 @@ REDIS_PORT = 6379
 REDIS_DB = 0
 ```
 
-### 4️⃣  Запуск с помощью Docker
+### 5️⃣ Запуск с помощью Docker
 Для удобства работы проект уже настроен для запуска в Docker-контейнере. В директории проекта запусти
 
 ```bash
