@@ -10,6 +10,7 @@ services:
   bot:
     build: .
     container_name: simple_offer_bot
+    restart: always
     depends_on:
       - redis
     ports:
