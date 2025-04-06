@@ -1,5 +1,5 @@
-# Используем Python 3.13
-FROM python:3.13
+# Используем Python 3.12
+FROM python:3.12
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
