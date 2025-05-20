@@ -1,6 +1,10 @@
 # Используем Python 3.12
 FROM python:3.12
 
+# Установка времени
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
