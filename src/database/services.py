@@ -66,5 +66,5 @@ class UserSettingsServices:
         locations = [obj.location for obj in locations]
         grades = [obj.grade for obj in grades]
         specialities = [obj.speciality for obj in specialities]
-        salary_value = int(salary.salary)
+        salary_value = int(salary.salary) if salary else None
         return locations, specialities, grades, salary_value

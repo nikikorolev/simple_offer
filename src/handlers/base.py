@@ -54,15 +54,18 @@ async def cmd_start(message: Message, state: FSMContext, session_without_commit:
     services = UserSettingsServices(
         session_without_commit)
     settings = await services.get_user_settings_by_telegram_id(user_id)
-    locations, specialties, grades, salary = services.get_listed_data_from_user_settings(
-        *settings)
-    text = (
-        f"✅ *Твои настройки:*\n\n"
-        f"🌍 Локации: {', '.join(locations)}\n"
-        f"💼 Специальности: {', '.join(specialties)}\n"
-        f"📈 Грейды: {', '.join(grades)}\n"
-        f"💰 Уровень зарплаты: более {int(salary)} рублей\n"
-    ) if locations else f"❌ Ты еще не сохранял свои настройки! 👉 Жми /settings"
+    if settings[3]:
+        locations, specialties, grades, salary = services.get_listed_data_from_user_settings(
+            *settings)
+        text = (
+            f"✅ *Твои настройки:*\n\n"
+            f"🌍 Локации: {', '.join(locations)}\n"
+            f"💼 Специальности: {', '.join(specialties)}\n"
+            f"📈 Грейды: {', '.join(grades)}\n"
+            f"💰 Уровень зарплаты: более {int(salary)} рублей\n"
+        )
+    else:
+        text = f"❌ Ты еще не сохранял свои настройки! 👉 Жми /settings"
 
     await message.answer(
         text,
