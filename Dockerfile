@@ -18,8 +18,5 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 # Копируем остальной код проекта
 COPY . /app
 
-# Создаём папку для базы данных
-RUN mkdir -p /data
-
 # Указываем команду для запуска бота
 CMD ["python", "src/bot.py"]

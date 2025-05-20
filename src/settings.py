@@ -16,7 +16,7 @@ REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
 # Настройки sqlite3
 DB_NAME = os.getenv("DB_NAME")
-DATABASE_URL = f"sqlite+aiosqlite:///../data/{DB_NAME}.sqlite3"
+DATABASE_URL = f"sqlite+aiosqlite:///./data/{DB_NAME}.sqlite3"
 
 
 # Настройки loguru
