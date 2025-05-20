@@ -7,7 +7,7 @@ from aiogram.types import Message, CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from keyboards.markups import get_inline_markup_for_select
-from dao.dao import UserDAO, LocationDAO, SalaryDAO, SpecialityDAO, GradeDAO
+from database.dao import UserDAO, LocationDAO, SalaryDAO, SpecialityDAO, GradeDAO
 from constants import LOCATION_CHOICES, GRADE_CHOICES, SPECIALTY_CHOICES, SALARY_CHOICES
 
 router = Router()

@@ -1,22 +1,32 @@
 import aiohttp
 from loguru import logger
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
 
 
 class HeadhunterVacanciesParser:
-    """Парсер для headhunter-а"""
+    """
+    Парсер для получения вакансий с API HeadHunter.
 
-    def __init__(self, params: Optional[Dict[str, str]] = None, per_page: int = 20):
-        """
-        Инициализация парсера вакансий с параметрами для запроса.
-        """
-        self.base_url = "https://api.hh.ru/vacancies"
-        self.params = params or {}
-        self.per_page = per_page
+    Args:
+        params (Optional[Dict[str, str]]): Параметры запроса к API.
+        per_page (int): Количество вакансий на странице (пагинация).
+    """
+
+    def __init__(self, params: Optional[Dict[str, str]] = None, per_page: int = 20) -> None:
+        self.base_url: str = "https://api.hh.ru/vacancies"
+        self.params: Dict[str, str] = params or {}
+        self.per_page: int = per_page
 
     async def get_vacancies(self, session: aiohttp.ClientSession, page: int = 0) -> Optional[Dict]:
         """
-        Получение данных о вакансиях для конкретной страницы.
+        Получить данные о вакансиях с конкретной страницы.
+
+        Args:
+            session (aiohttp.ClientSession): Асинхронная сессия для HTTP запросов.
+            page (int): Номер страницы для пагинации.
+
+        Returns:
+            Optional[Dict]: Словарь с ответом API или None при ошибке.
         """
         params = self.params.copy()
         params["page"] = page
@@ -35,59 +45,77 @@ class HeadhunterVacanciesParser:
 
     async def get_pages(self, session: aiohttp.ClientSession) -> int:
         """
-        Получение общего числа страниц для всех вакансий.
+        Получить общее количество страниц с вакансиями.
+
+        Args:
+            session (aiohttp.ClientSession): Асинхронная сессия.
+
+        Returns:
+            int: Количество страниц.
         """
         vacancies_data = await self.get_vacancies(session, page=0)
-        if vacancies_data:
+        if vacancies_data and "pages" in vacancies_data:
             logger.debug(
-                f"Количество страниц с вакансиями: {vacancies_data["pages"]}")
+                f"Количество страниц с вакансиями: {vacancies_data['pages']}")
             return vacancies_data["pages"]
-        else:
-            logger.debug("Не удалось получить данные о страницах.")
-            return 0
+        logger.debug("Не удалось получить данные о страницах.")
+        return 0
 
-    def parse_vacancies(self, vacancies_data: Dict) -> List[Dict[str, Optional[str]]]:
+    def parse_vacancies(self, vacancies_data: Dict) -> List[Dict[str, Optional[Union[str, int]]]]:
         """
-        Парсинг данных вакансий из ответа API.
+        Распарсить вакансии из ответа API.
+
+        Args:
+            vacancies_data (Dict): Данные ответа API.
+
+        Returns:
+            List[Dict[str, Optional[Union[str, int]]]]: Список вакансий с нужными полями.
         """
         if not vacancies_data:
             logger.debug("Отсутствуют данные для парсинга.")
             return []
 
-        vacancies = []
-        logger.debug(
-            f"Парсинг {len(vacancies_data.get("items", []))} вакансий.")
-        for vacancy in vacancies_data.get("items", []):
+        items = vacancies_data.get("items", [])
+        logger.debug(f"Парсинг {len(items)} вакансий.")
+        vacancies: List[Dict[str, Optional[Union[str, int]]]] = []
+
+        for vacancy in items:
+            salary = vacancy.get("salary")
+            snippet = vacancy.get("snippet", {})
             vac_info = {
-                "id": vacancy["id"],
-                "name": vacancy["name"],
-                "salary_from": vacancy["salary"]["from"] if vacancy["salary"] else None,
-                "salary_to": vacancy["salary"]["to"] if vacancy["salary"] else None,
-                "salary_currency": vacancy["salary"]["currency"] if vacancy["salary"] else None,
-                "location": vacancy["area"]["name"] if vacancy.get("area") else None,
-                "employer": vacancy["employer"]["name"] if vacancy.get("employer") else None,
-                "link": vacancy["alternate_url"],
-                "description": vacancy["snippet"]["requirement"] if vacancy.get("snippet") else "",
-                "responsibility": vacancy["snippet"]["responsibility"] if vacancy.get("snippet") else "",
+                "id": vacancy.get("id"),
+                "name": vacancy.get("name"),
+                "salary_from": salary.get("from") if salary else None,
+                "salary_to": salary.get("to") if salary else None,
+                "salary_currency": salary.get("currency") if salary else None,
+                "location": vacancy.get("area", {}).get("name") if vacancy.get("area") else None,
+                "employer": vacancy.get("employer", {}).get("name") if vacancy.get("employer") else None,
+                "link": vacancy.get("alternate_url"),
+                "description": snippet.get("requirement", ""),
+                "responsibility": snippet.get("responsibility", ""),
             }
             vacancies.append(vac_info)
+
         logger.debug(f"Парсинг завершен. Найдено {len(vacancies)} вакансий.")
         return vacancies
 
-    async def get_all_vacancies(self) -> List[Dict[str, Optional[str]]]:
+    async def get_all_vacancies(self) -> List[Dict[str, Optional[Union[str, int]]]]:
         """
-        Получение всех вакансий, проходя по всем страницам.
+        Получить все вакансии, обходя все страницы.
+
+        Returns:
+            List[Dict[str, Optional[Union[str, int]]]]: Полный список вакансий.
         """
         async with aiohttp.ClientSession() as session:
             pages = await self.get_pages(session)
-            all_vacancies = []
+            all_vacancies: List[Dict[str, Optional[Union[str, int]]]] = []
             logger.debug(
                 f"Начало получения всех вакансий. Всего страниц: {pages}")
 
             for page in range(pages):
                 logger.debug(f"Получение вакансий с страницы {page}")
                 vacancies_data = await self.get_vacancies(session, page)
-                if vacancies_data is None or not vacancies_data.get("items"):
+                if not vacancies_data or not vacancies_data.get("items"):
                     logger.debug(
                         f"Нет вакансий на странице {page}, завершение парсинга.")
                     break

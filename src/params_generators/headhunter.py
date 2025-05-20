@@ -12,14 +12,14 @@ class ParamsGeneratorHeadhunter:
     по локации, специальности, уровню опыта, зарплате и дате публикации.
     """
 
-    __LOCATIONS_PARAMS = {
+    _LOCATIONS_PARAMS = {
         "Москва (офис, удаленно)": {"area": "1"},
         "Санкт-Петербург (офис, удаленно)": {"area": "2"},
         "Удаленно": {"work_format": "REMOTE"},
         "Другие страны": {"area": "1001"},
     }
 
-    __SPETIALITIES_PARAMS = {
+    _SPETIALITIES_PARAMS = {
         "Тестировщик": {"professional_role": "124", "text": "QA python java"},
         "Data Scientist/Analyst": {"professional_role": "165"},
         "System Analyst": {"professional_role": "148"},
@@ -30,32 +30,33 @@ class ParamsGeneratorHeadhunter:
         "Product Manager": {"professional_role": "73"},
     }
 
-    __GRADES_PARAMS = {
+    _GRADES_PARAMS = {
+        # TO-DO: "text": "intern junior стажер начинающий интерн джуниор"
         "Intern-Junior": {"experience": "noExperience"},
         "Junior-Middle": {"experience": "between1And3"},
         "Middle-Senior": {"experience": "between3And6"},
         "Senior+": {"experience": "moreThan6"},
     }
 
-    def __get_params_from_grade(self, grade: str) -> dict:
+    def _get_params_from_grade(self, grade: str) -> dict:
         """
         Получает параметры для запроса по уровню опыта.
         """
-        return self.__GRADES_PARAMS.get(grade, {})
+        return self._GRADES_PARAMS.get(grade, {})
 
-    def __get_params_from_date(self, date: datetime) -> dict:
+    def _get_params_from_date(self, date: datetime) -> dict:
         """
         Преобразует дату в параметр запроса.
         """
         return {"date_from": str(format_date(date))}
 
-    def __get_params_from_salary(self, salary: int | float) -> dict:
+    def _get_params_from_salary(self, salary: int | float) -> dict:
         """
         Преобразует зарплату в параметр запроса.
         """
         return {"salary": salary}
 
-    def __get_params_several(self, characteristics: List[str], params_configurator: dict) -> dict:
+    def _get_params_several(self, characteristics: List[str], params_configurator: dict) -> dict:
         """
         Объединяет параметры для списка характеристик. 
         characteristics: Список значений (например, локации или специальности).
@@ -73,12 +74,12 @@ class ParamsGeneratorHeadhunter:
         Формирует окончательный набор параметров для запроса.
         """
         params = {}
-        params = merge_dicts(params, self.__get_params_several(
-            locations, self.__LOCATIONS_PARAMS))
-        params = merge_dicts(params, self.__get_params_several(
-            specialities, self.__SPETIALITIES_PARAMS))
-        params = merge_dicts(params, self.__get_params_from_grade(grade))
-        params = merge_dicts(params, self.__get_params_from_salary(salary))
-        params = merge_dicts(params, self.__get_params_from_date(date))
+        params = merge_dicts(params, self._get_params_several(
+            locations, self._LOCATIONS_PARAMS))
+        params = merge_dicts(params, self._get_params_several(
+            specialities, self._SPETIALITIES_PARAMS))
+        params = merge_dicts(params, self._get_params_from_grade(grade))
+        params = merge_dicts(params, self._get_params_from_salary(salary))
+        params = merge_dicts(params, self._get_params_from_date(date))
 
         return params

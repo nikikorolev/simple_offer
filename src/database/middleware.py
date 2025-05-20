@@ -2,7 +2,7 @@ from typing import Callable, Dict, Any, Awaitable
 from abc import ABC, abstractmethod
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
-from dao.database import Session
+from database.database import Session
 
 
 class BaseDatabaseMiddleware(BaseMiddleware, ABC):
