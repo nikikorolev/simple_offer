@@ -33,27 +33,6 @@ class VacanciesFinder:
         if not self.telegram_id:
             raise ValueError("telegram_id не должен быть пустым!")
 
-    async def _get_user_settings(self) -> Tuple[List[Location], List[Speciality], List[Grade], Optional[Salary]]:
-        """
-        Получение пользовательских настроек по telegram_id.
-
-        Returns:
-            Tuple[List[Location], List[Speciality], List[Grade], Optional[Salary]]: 
-            Кортеж из списков Location, Speciality, Grade и одного объекта Salary (может быть None).
-        """
-        return await UserSettingsServices(self.session).get_user_settings_by_telegram_id(self.telegram_id)
-
-    async def _get_last_message_date_headhunter(self) -> Optional[str]:
-        """
-        Получение даты последней отправленной вакансии.
-
-        Returns:
-            Optional[str]: Дата в строковом формате или None, если даты нет.
-        """
-        return await SentVacanciesHeadhunterDAO.get_last_date_by_telegram_id(
-            self.session, self.telegram_id
-        )
-
     async def _get_listed_data_from_user_settings_and_last_date_headhunter(self) -> Tuple[List[str], List[str], List[str], int, Optional[str]]:
         """
         Формирует параметры поиска: локации, специальности, грейды, зарплата, дата.
@@ -64,12 +43,13 @@ class VacanciesFinder:
                 - Зарплата (int),
                 - Дата последнего сообщения (str или None).
         """
-        locations, specialities, grades, salary = await self._get_user_settings()
-        locations = [obj.location for obj in locations]
-        grades = [obj.grade for obj in grades]
-        specialities = [obj.speciality for obj in specialities]
-        salary_value = int(salary.salary) if salary else 0
-        date = await self._get_last_message_date_headhunter()
+        services = UserSettingsServices(self.session)
+        settings = await services.get_user_settings_by_telegram_id(self.telegram_id)
+        locations, specialities, grades, salary_value = services.get_listed_data_from_user_settings(
+            *settings)
+        date = await SentVacanciesHeadhunterDAO.get_last_date_by_telegram_id(
+            self.session, self.telegram_id
+        )
         return locations, specialities, grades, salary_value, date
 
     async def _generate_params_headhunter(self) -> List[Dict]:

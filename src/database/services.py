@@ -51,3 +51,20 @@ class UserSettingsServices:
             logger.error(
                 f"Ошибка при получении настроек для пользователя с ID {telegram_id}: {e}")
             raise
+
+    def get_listed_data_from_user_settings(self, locations: List[Location], specialities:  List[Speciality], grades: List[Grade], salary: List[Salary]):
+        """
+
+        Получение настроек в виде списка с текстовой информацией.
+
+        Args:
+            locations (List[Location]): объекты локаций
+            specialities (List[Speciality]): объекты специальностей
+            grades (List[Grade]): объекты грейдов
+            salary (List[Salary]): зарплата
+        """
+        locations = [obj.location for obj in locations]
+        grades = [obj.grade for obj in grades]
+        specialities = [obj.speciality for obj in specialities]
+        salary_value = int(salary.salary)
+        return locations, specialities, grades, salary_value
