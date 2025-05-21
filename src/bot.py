@@ -8,6 +8,7 @@ from handlers import base, user_settings
 from handlers.vacancy_sender import VacanciesSender
 from database.database import init_db
 from database.middleware import DatabaseMiddlewareWithCommit, DatabaseMiddlewareWithoutCommit
+from analytics.parser import parse_and_save_analytics
 
 
 async def main():
@@ -26,6 +27,7 @@ async def main():
     try:
         logger.info("Bot started!")
         asyncio.create_task(VacanciesSender(bot).start_sending())
+        asyncio.create_task(parse_and_save_analytics())
         await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
