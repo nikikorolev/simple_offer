@@ -30,10 +30,10 @@ async def cmd_start(message: Message, state: FSMContext):
     if command_name == "help":
         text = (
             "📚 *Доступные команды:*\n\n"
-            "👉 /start — начать работу с ботом 🚀\n"
-            "👉 /help — открыть список команд 📝\n"
-            "👉 /settings — изменить настройки ⚙️\n"
-            "👉 /my\_settings — сохраненные настройки ⚙️\n")
+            "🚀 /start — начать работу с ботом\n"
+            "📝 /help — открыть список команд\n"
+            "⚙️ /settings — изменить настройки\n"
+            "🆙 /profile — сохраненные настройки\n")
         logger.info(
             f"Сообщение с командой помощи отправлено пользователю {user_id}.")
 
@@ -45,7 +45,7 @@ async def cmd_start(message: Message, state: FSMContext):
     logger.info(f"Ответ на команду отправлен пользователю {user_id}.")
 
 
-@router.message(Command(commands=["my_settings"]))
+@router.message(Command(commands=["profile"]))
 async def cmd_start(message: Message, state: FSMContext, session_without_commit: AsyncSession):
     user_id = message.from_user.id
     logger.info(f"Пользователь {user_id} вызвал команду: {message.text}")

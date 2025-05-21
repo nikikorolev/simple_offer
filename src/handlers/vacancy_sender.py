@@ -11,10 +11,7 @@ from database.dao import (
 )
 from database.database import Session
 from database.services import UserSettingsServices
-from database.models import (
-    User, Location, Salary,
-    Grade, Speciality
-)
+from database.models import User
 from keyboards.markups import get_inline_markup_send_vacancy
 from handlers.utils import clean_text_from_html
 
