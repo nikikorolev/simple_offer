@@ -161,7 +161,7 @@ class AnalyticsParser:
             }
 
             async with aiofiles.open(path, "w") as f:
-                await f.write(json.dumps(record, indent=2, ensure_ascii=False))
+                await f.write(json.dumps([record], indent=2, ensure_ascii=False))
             logger.info("Данные для аналитики сохранены")
         except Exception as e:
             logger.exception(f"Ошибка во время сохранения данных {e}")
