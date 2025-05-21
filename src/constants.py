@@ -16,14 +16,16 @@ GRADE_CHOICES = (
 
 # Специализации
 SPECIALTY_CHOICES = (
+    "Программист Python",
+    "Программист Java",
     "Тестировщик",
-    "Data Scientist/Analyst",
-    "System Analyst",
-    "BI Analyst",
-    "Product Analyst",
+    "Дата саентист/аналитик",
+    "Системный аналитик",
+    "Бизнес аналитик",
+    "Продуктовый аналитик",
     "DevOps",
-    "Designer",
-    "Product Manager",
+    "Дизайнер",
+    "Менеджер продукта",
 )
 
 # Диапазоны зарплат

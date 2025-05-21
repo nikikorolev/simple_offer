@@ -20,18 +20,19 @@ class ParamsGeneratorHeadhunter:
     }
 
     _SPETIALITIES_PARAMS = {
-        "Тестировщик": {"professional_role": "124", "text": "QA python java"},
-        "Data Scientist/Analyst": {"professional_role": "165"},
-        "System Analyst": {"professional_role": "148"},
-        "BI Analyst": {"professional_role": "156"},
-        "Product Analyst": {"professional_role": "164"},
+        "Программист Python": {"professional_role": "96", "text": "python OR питон"},
+        "Программист Java": {"professional_role": "96", "text": "java OR java"},
+        "Тестировщик": {"professional_role": "124", "text": "QA OR python OR java"},
+        "Дата саентист/аналитик": {"professional_role": "165"},
+        "Системный аналитик": {"professional_role": "148"},
+        "Бизнес аналитик": {"professional_role": "156"},
+        "Продуктовый аналитик": {"professional_role": "164"},
         "DevOps": {"professional_role": "160"},
-        "Designer": {"professional_role": "34"},
-        "Product Manager": {"professional_role": "73"},
+        "Дизайнер": {"professional_role": "34"},
+        "Менеджер продукта": {"professional_role": "73"},
     }
 
     _GRADES_PARAMS = {
-        # TO-DO: "text": "intern junior стажер начинающий интерн джуниор"
         "Intern-Junior": {"experience": "noExperience"},
         "Junior-Middle": {"experience": "between1And3"},
         "Middle-Senior": {"experience": "between3And6"},
