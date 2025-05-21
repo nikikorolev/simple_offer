@@ -65,9 +65,10 @@ poetry install
 Создайте .env файл в корневой директории и укажите в нём настройки:
 ```env
 TOKEN = "YOUR_BOT_TOKEN"
+BOT_PORT = YOUR_BOT_PORT
 DB_NAME = "db"
 REDIS_HOST = "redis"
-REDIS_PORT = 6379
+REDIS_PORT = YOUR_REDIS_PORT
 REDIS_DB = 0
 ```
 
@@ -75,7 +76,7 @@ REDIS_DB = 0
 Для удобства работы проект уже настроен для запуска в Docker-контейнере. В директории проекта запусти
 
 ```bash
-docker-compose up --build
+scripts/run.sh
 ```
 
 ## 👥 Контакты
