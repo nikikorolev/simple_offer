@@ -16,3 +16,6 @@ services:
     volumes:
       - .:/app
       - ./data:/app/data
+      - ~/.ssh:/root/.ssh:ro
+    stdin_open: true
+    tty: true

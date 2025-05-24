@@ -1,17 +1,12 @@
 from datetime import datetime, time
 from collections import defaultdict
-import asyncio
 import json
-import os
 import aiofiles
-import subprocess
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
 
 from database.dao import UserDAO, SentVacanciesHeadhunterDAO
-from database.database import Session
 
 
 class AnalyticsParser:
@@ -167,15 +162,3 @@ class AnalyticsParser:
             logger.exception(f"Ошибка во время сохранения данных {e}")
 
         return record
-
-
-async def parse_and_save_analytics():
-    async with Session() as session:
-        scheduler = AsyncIOScheduler()
-        parser = AnalyticsParser(session)
-        await parser.save_and_get_data_to_json()
-        scheduler.add_job(parser.save_and_get_data_to_json,
-                          "interval", minutes=5)
-        scheduler.start()
-        while True:
-            await asyncio.sleep(60)
