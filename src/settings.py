@@ -18,6 +18,12 @@ REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 DB_NAME = os.getenv("DB_NAME")
 DATABASE_URL = f"sqlite+aiosqlite:///./data/{DB_NAME}.sqlite3"
 
+# Настройки GIT
+GIT_BRANCH = os.getenv("GIT_BRANCH")
+GIT_NICKNAME = os.getenv("GIT_NICKNAME")
+GIT_MAIL = os.getenv("GIT_MAIL")
+GIT_NAME = os.getenv("GIT_NAME")
+REPOSITORY_NAME = os.getenv("REPOSITORY_NAME")
 
 # Настройки loguru
 LOG_FILE_PATH = os.path.join(os.getcwd(), "logs/bot.log")
