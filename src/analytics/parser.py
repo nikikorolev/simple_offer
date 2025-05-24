@@ -175,7 +175,7 @@ async def parse_and_save_analytics():
         parser = AnalyticsParser(session)
         await parser.save_and_get_data_to_json()
         scheduler.add_job(parser.save_and_get_data_to_json,
-                          "interval", minutes=5)
+                          "interval", minutes=1)
         scheduler.start()
         while True:
             await asyncio.sleep(60)
