@@ -1,15 +1,12 @@
-from typing import List
 from datetime import datetime
+from typing import List
 
-from .utils import merge_dicts, format_date
+from params_generators.utils import merge_dicts, format_date
 
 
 class ParamsGeneratorHeadhunter:
     """
-    Генератор параметров для запросов к HeadHunter API.
-
-    Использует предопределенные параметры для фильтрации вакансий 
-    по локации, специальности, уровню опыта, зарплате и дате публикации.
+    Генератор параметров для формирования запросов к API HeadHunter.
     """
 
     _LOCATIONS_PARAMS = {
@@ -20,9 +17,7 @@ class ParamsGeneratorHeadhunter:
     }
 
     _SPETIALITIES_PARAMS = {
-        "Программист Python": {"professional_role": "96", "text": "python OR питон"},
-        "Программист Java": {"professional_role": "96", "text": "java OR java"},
-        "Тестировщик": {"professional_role": "124", "text": "QA OR python OR java"},
+        "Тестировщик": {"professional_role": "124"},
         "Дата саентист/аналитик": {"professional_role": "165"},
         "Системный аналитик": {"professional_role": "148"},
         "Бизнес аналитик": {"professional_role": "156"},
@@ -41,27 +36,50 @@ class ParamsGeneratorHeadhunter:
 
     def _get_params_from_grade(self, grade: str) -> dict:
         """
-        Получает параметры для запроса по уровню опыта.
+        Получает параметры фильтрации по уровню опыта.
+
+        Args:
+            grade (str): Уровень опыта (например, "Junior-Middle").
+
+        Returns:
+            dict: Словарь параметров для фильтрации по опыту.
         """
         return self._GRADES_PARAMS.get(grade, {})
 
     def _get_params_from_date(self, date: datetime) -> dict:
         """
-        Преобразует дату в параметр запроса.
+        Преобразует дату в параметр запроса для фильтрации вакансий по дате публикации.
+
+        Args:
+            date (datetime): Дата, с которой нужно фильтровать вакансии.
+
+        Returns:
+            dict: Словарь с параметром 'date_from' для запроса.
         """
         return {"date_from": str(format_date(date))}
 
     def _get_params_from_salary(self, salary: int | float) -> dict:
         """
-        Преобразует зарплату в параметр запроса.
+        Преобразует значение зарплаты в параметр запроса.
+
+        Args:
+            salary (int | float): Минимальная зарплата для фильтрации.
+
+        Returns:
+            dict: Словарь с параметром 'salary' для запроса.
         """
         return {"salary": salary}
 
     def _get_params_several(self, characteristics: List[str], params_configurator: dict) -> dict:
         """
-        Объединяет параметры для списка характеристик. 
-        characteristics: Список значений (например, локации или специальности).
-        params_configurator: Словарь с параметрами для этих характеристик.
+        Объединяет параметры для нескольких характеристик (например, локаций или специальностей).
+
+        Args:
+            characteristics (List[str]): Список значений характеристик.
+            params_configurator (dict): Словарь, где ключ — характеристика, а значение — параметры.
+
+        Returns:
+            dict: Объединённый словарь параметров для всех переданных характеристик.
         """
         params = {}
         for characteristic in characteristics:
@@ -72,7 +90,17 @@ class ParamsGeneratorHeadhunter:
 
     def get_params(self, locations: List[str], specialities: List[str], grade: str, salary: float | int, date: datetime) -> dict:
         """
-        Формирует окончательный набор параметров для запроса.
+        Формирует итоговый словарь параметров для запроса к API HeadHunter.
+
+        Args:
+            locations (List[str]): Список локаций.
+            specialities (List[str]): Список специальностей.
+            grade (str): Уровень опыта.
+            salary (float | int): Минимальная зарплата.
+            date (datetime): Дата публикации вакансии.
+
+        Returns:
+            dict: Словарь всех параметров для запроса.
         """
         params = {}
         params = merge_dicts(params, self._get_params_several(
