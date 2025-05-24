@@ -228,7 +228,7 @@ class VacanciesSender:
                     if not await self.is_vacancy_sending(session, vacancy["id"], telegram_id):
                         await asyncio.wait_for(self.vacancy_sending(vacancy, telegram_id), timeout=10)
                         await self.vacancy_saving(session, vacancy, telegram_id)
-                        await asyncio.sleep(0.5)
+                        await asyncio.sleep(3)
             except asyncio.TimeoutError:
                 logger.warning(
                     f"Timeout при обработке пользователя {telegram_id}")
