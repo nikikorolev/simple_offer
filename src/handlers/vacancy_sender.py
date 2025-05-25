@@ -3,6 +3,7 @@ import asyncio
 from typing import List, Dict, Optional, Tuple
 from aiogram import Bot
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime, timedelta
 
 from collectors.headhunter import HeadhunterVacanciesParser
 from params_generators.headhunter import ParamsGeneratorHeadhunter
@@ -44,9 +45,7 @@ class VacanciesFinder:
         settings = await services.get_user_settings_by_telegram_id(self.telegram_id)
         locations, specialities, grades, salary_value = services.get_listed_data_from_user_settings(
             *settings)
-        date = await SentVacanciesHeadhunterDAO.get_last_date_by_telegram_id(
-            self.session, self.telegram_id
-        )
+        date = datetime.now() - timedelta(minutes=10)
         return locations, specialities, grades, salary_value, date
 
     async def _generate_params_headhunter(self) -> List[Dict]:
