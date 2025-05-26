@@ -3,7 +3,7 @@ from loguru import logger
 
 from analytics.push import push_analytics
 
-SLEEP_TIME = 3600 * 3  # Интервал между запусками задачи в секундах (3 часа)
+SLEEP_TIME = 3600  # Интервал между запусками задачи в секундах (1 час)
 
 
 async def safe_push_analytics():
