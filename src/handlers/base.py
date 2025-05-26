@@ -4,6 +4,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from database.services import UserSettingsServices
 
@@ -33,7 +34,8 @@ async def cmd_start(message: Message, state: FSMContext):
             "🚀 /start — начать работу с ботом\n"
             "📝 /help — открыть список команд\n"
             "⚙️ /settings — изменить настройки\n"
-            "🆙 /profile — сохраненные настройки\n")
+            "🆙 /profile — сохраненные настройки\n",
+            "📊 /analytics - аналитика бота")
         logger.info(
             f"Сообщение с командой помощи отправлено пользователю {user_id}.")
 
@@ -73,3 +75,22 @@ async def cmd_start(message: Message, state: FSMContext, session_without_commit:
         parse_mode="Markdown"
     )
     logger.info(f"Ответ на команду отправлен пользователю {user_id}.")
+
+
+@router.message(Command(commands=["analytics"]))
+async def cmd_analytics(message: Message):
+    user_id = message.from_user.id
+    logger.info(f"Пользователь {user_id} вызвал команду: /analytics")
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Перейти к аналитике",
+                              url="https://nikikorolev.github.io/simple_offer")]
+    ])
+
+    await message.answer(
+        "📊 Нажми на кнопку ниже, чтобы открыть аналитику:",
+        reply_markup=keyboard,
+        parse_mode="Markdown"
+    )
+    logger.info(
+        f"Ответ с кнопкой на аналитику отправлен пользователю {user_id}.")
