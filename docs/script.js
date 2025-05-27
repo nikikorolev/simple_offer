@@ -15,7 +15,9 @@ async function loadData() {
       const filledCounts = Array(24).fill(0);
       hours.forEach((hour, index) => {
         if (hour >= 0 && hour < 24) {
-          filledCounts[hour] = counts[index];
+          const timezoneOffset = new Date().getTimezoneOffset() / 60;
+          const adjustedHour = (hour - timezoneOffset) % 24;
+          filledCounts[adjustedHour] = counts[index];
         }
       });
       return filledCounts;
