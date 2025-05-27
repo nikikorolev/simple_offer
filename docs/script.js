@@ -15,7 +15,8 @@ async function loadData() {
       const filledCounts = Array(24).fill(0);
       hours.forEach((hour, index) => {
         if (hour >= 0 && hour < 24) {
-          filledCounts[hour] = counts[index];
+          const adjustedHour = (hour + 3) % 24; 
+        filledCounts[adjustedHour] = counts[index];
         }
       });
       return filledCounts;
