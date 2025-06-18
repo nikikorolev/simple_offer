@@ -1,10 +1,10 @@
 [
   {
-    "timestamp": "2025-06-18T13:38:23.171706",
+    "timestamp": "2025-06-18T14:38:30.189294",
     "count_users": 4,
     "count_users_today": 0,
-    "count_messages": 630,
-    "count_messages_today": 22,
+    "count_messages": 631,
+    "count_messages_today": 23,
     "count_messages_per_hour": {
       "hours": [
         5,
@@ -12,7 +12,8 @@
         7,
         8,
         9,
-        10
+        10,
+        11
       ],
       "count_messages": [
         2,
@@ -20,7 +21,8 @@
         3,
         2,
         9,
-        5
+        5,
+        1
       ]
     }
   }
